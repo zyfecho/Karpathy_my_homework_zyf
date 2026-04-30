@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Uart</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="uart">UART 串口通信</h1>
+<p>UART（Universal Asynchronous Receiver/Transmitter）是嵌入式系统中最常用的异步串行通信接口，全双工，使用TX和RX两根线。</p>
+<h2 id="_1">串行通信基本参数</h2>
+<ol>
+<li><strong>波特率</strong> — 每秒传输的数据位数（bps），如4800bps = 600 byte/s</li>
+<li><strong>数据位</strong> — 5/6/7/8位，从最低有效位开始传输</li>
+<li><strong>起始位</strong> — 逻辑"0"，标志一帧数据开始</li>
+<li><strong>停止位</strong> — 可以是1位、1.5位或2位</li>
+<li><strong>奇偶校验位</strong> — 有限差错校验，通信双方需约定一致</li>
+</ol>
+<h2 id="_2">电平标准对比</h2>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>双工</th>
+<th>电平</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UART (TTL)</td>
+<td>全双工</td>
+<td>3.3V/5V</td>
+<td>最基本的串口通信</td>
+</tr>
+<tr>
+<td>RS232</td>
+<td>全双工</td>
+<td>+5~+12V为低，-12~-5V为高</td>
+<td>负逻辑电平，需MAX232转换芯片</td>
+</tr>
+<tr>
+<td>RS485</td>
+<td>半双工</td>
+<td>差分信号</td>
+<td>双线电平差确定信号，抑制共模干扰，适合远距离多机通信</td>
+</tr>
+</tbody>
+</table>
+<h2 id="usb">USB虚拟串口</h2>
+<p>现代开发板通常使用USB转串口方案：
+- 开发板上的STM32F103C8T6实现DAP调试下载器 + USB虚拟串口
+- 将STM32F4的串口1虚拟为Windows可识别的USB串口
+- Win10以上系统可自动识别，Win7/8需另装驱动</p>
+<h2 id="hal">HAL库函数</h2>
+<pre><code class="language-c">// 阻塞方式
+HAL_UART_Transmit(&amp;huart, pData, Size, Timeout);
+HAL_UART_Receive(&amp;huart, pData, Size, Timeout);
+
+// 中断方式
+HAL_UART_Transmit_IT(&amp;huart, pData, Size);
+HAL_UART_Receive_IT(&amp;huart, pData, Size);
+
+// DMA方式
+HAL_UART_Transmit_DMA(&amp;huart, pData, Size);
+HAL_UART_Receive_DMA(&amp;huart, pData, Size);
+</code></pre>
+<h2 id="_3">回调函数</h2>
+<pre><code class="language-c">HAL_UART_TxCpltCallback(&amp;huart);                    // 发送完成
+HAL_UART_RxCpltCallback(&amp;huart);                    // 接收完成
+HAL_UARTEx_RxEventCallback(&amp;huart, Size);           // 接收事件（如IDLE触发）
+</code></pre>
+<h2 id="_4">相关主题</h2>
+<ul>
+<li><a href="i2c.html">[link]</a> — 同步串行通信协议</li>
+<li><a href="spi.html">[link]</a> — 同步串行通信协议</li>
+<li><a href="hal-quick-reference.html">[link]</a> — 完整HAL函数速查</li>
+<li><a href="freertos-ipc.html">[link]</a> — RTOS下的串口通信设计</li>
+<li><a href="sensors-and-modules.html">[link]</a> — ESP01模块通过串口AT指令通信</li>
+<li><a href="interview-guide.html">[link]</a> — 面试常考通信协议对比</li>
+</ul>
+<h2 id="_5">来源</h2>
+<ul>
+<li><code>实验06_基于RTOS的串口通信实验(V25).pdf</code> — 串口通信原理、USB虚拟串口、基于RTOS的串口实验（28页）</li>
+<li><code>八股默写.docx</code> — UART/RS232/RS485电气特性对比</li>
+<li><code>第九章 串口通信V2.pptx</code> — 串口通信课件</li>
+<li><code>index.md</code> — HAL库UART函数速查</li>
+</ul>
+</body>
+</html>

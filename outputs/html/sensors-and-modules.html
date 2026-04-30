@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Sensors And Modules</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="_1">传感器与模块</h1>
+<p>嵌入式开发中常用的外围模块，包括无线通信模块、显示模块、电机驱动和蜂鸣器等。</p>
+<h2 id="esp01-wifi">ESP01 WiFi 模块</h2>
+<p>ESP01 基于乐鑫 ESP8266 芯片，支持 IEEE802.11b/g/n，内置 TCP/IP 协议栈。</p>
+<h3 id="_2">工作模式</h3>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>说明</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AP 热点模式</td>
+<td>ESP01 作为热点，其他设备连接它</td>
+<td>1对多连接</td>
+</tr>
+<tr>
+<td>STA 连接模式</td>
+<td>ESP01 连接路由器或远程服务器</td>
+<td>联网通信</td>
+</tr>
+<tr>
+<td>AP + STA</td>
+<td>两种模式同时开启</td>
+<td>混合场景</td>
+</tr>
+</tbody>
+</table>
+<h3 id="at">常用 AT 指令</h3>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AT</code></td>
+<td>测试模块连接状态</td>
+</tr>
+<tr>
+<td><code>ATE0</code></td>
+<td>关闭命令回显</td>
+</tr>
+<tr>
+<td><code>AT+CWMODE=2</code></td>
+<td>开启AP模式</td>
+</tr>
+<tr>
+<td><code>AT+CWMODE=3</code></td>
+<td>开启STA+AP模式</td>
+</tr>
+<tr>
+<td><code>AT+CWJAP="SSID","PWD"</code></td>
+<td>连接WiFi热点</td>
+</tr>
+<tr>
+<td><code>AT+CIPSTART="TCP","IP",Port</code></td>
+<td>连接TCP服务器</td>
+</tr>
+<tr>
+<td><code>AT+CIPMODE=1</code></td>
+<td>设置透传模式</td>
+</tr>
+<tr>
+<td><code>AT+CIPSEND</code></td>
+<td>开始透传</td>
+</tr>
+<tr>
+<td><code>+++</code>（无回车）</td>
+<td>退出透传模式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">硬件连接</h3>
+<ul>
+<li>使用 STM32 的 PC6/PC7 引脚（串口6）</li>
+<li>CubeMX 中配置 USART6 即可通信</li>
+<li>模块天线方向朝实验板外</li>
+</ul>
+<h2 id="emm42-v50">Emm42 V5.0 步进闭环驱动</h2>
+<p>张大头闭环伺服推出的步进电机驱动模块，支持多种控制方式。</p>
+<h3 id="_4">控制方式</h3>
+<ul>
+<li><strong>脉冲控制</strong>：STM32/Arduino/51/PLC 均可接入，通过 PUL/DIR/EN 信号控制</li>
+<li><strong>通讯控制</strong>：支持串口TTL、RS232、RS485、CAN总线</li>
+<li>支持多机通讯及同步控制</li>
+</ul>
+<h3 id="_5">适用场景</h3>
+<p>3D打印、写字机、雕刻机、PLC控制、机械臂、小车比赛等。</p>
+<h2 id="oled">OLED 显示模块</h2>
+<ul>
+<li>0.96寸单色OLED，128×64分辨率，驱动IC为SSD1306</li>
+<li>通信方式：<a href="i2c.html">[link]</a> 或 <a href="spi.html">[link]</a></li>
+<li>驱动文件注意 <code>SSD1306_i2c.c</code> 中引脚宏定义与实际接线一致</li>
+</ul>
+<h2 id="pwm">蜂鸣器（PWM控制）</h2>
+<ul>
+<li>无源蜂鸣器通过 <a href="timer.html">[link]</a> 的 PWM 输出控制</li>
+<li>频率控制音调（如 C5 = 523.25Hz）</li>
+<li>占空比控制音量（典型50%）</li>
+<li>脉冲个数控制时长</li>
+<li>可用于播放 MIDI 音乐</li>
+</ul>
+<h2 id="_6">相关主题</h2>
+<ul>
+<li><a href="uart.html">[link]</a> — ESP01 通过串口 AT 指令通信</li>
+<li><a href="i2c.html">[link]</a> — OLED 模块 I2C 驱动</li>
+<li><a href="spi.html">[link]</a> — OLED 模块 SPI 驱动</li>
+<li><a href="timer.html">[link]</a> — PWM 控制蜂鸣器与步进电机脉冲</li>
+</ul>
+<h2 id="_7">来源</h2>
+<ul>
+<li><code>自选实验1-1_基于ESP01的无线通信实验(V25).pdf</code> — ESP01模块介绍、AT指令、AP/STA模式配置（20页）</li>
+<li><code>Emm_V5.0步进闭环驱动说明书Rev1.3.pdf</code> — 步进闭环驱动完整说明书，含脉冲/通讯控制、接线、AT命令列表（66页）</li>
+<li><code>实验07_GUI应用实验(V25).pdf</code> — OLED显示模块驱动与I2C通信（32页）</li>
+<li><code>自选实验2-1_乐曲播放实验(V25).pdf</code> — 蜂鸣器PWM控制与MIDI音乐播放（19页）</li>
+</ul>
+</body>
+</html>

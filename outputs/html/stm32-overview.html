@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Stm32 Overview</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="stm32">STM32 微控制器概述</h1>
+<p>STM32是意法半导体（ST）基于ARM Cortex-M内核的32位微控制器产品系列，广泛应用于嵌入式系统开发。该系列包含多个子系列，覆盖从基本型到互联型的不同应用需求。</p>
+<h2 id="_1">产品命名规则</h2>
+<p>以 <code>STM32F103C8T6</code> 为例：</p>
+<ul>
+<li><strong>STM32</strong> — 基于ARM的32位微控制器</li>
+<li><strong>F</strong> — 通用类型</li>
+<li><strong>103</strong> — 增强型（101=基本型，102=USB基本型，105/107=互联型）</li>
+<li><strong>C</strong> — 48脚（T=36, R=64, V=100, Z=144）</li>
+<li><strong>8</strong> — 64K字节闪存（4=16K, 6=32K, B=128K, C=256K, D=384K, E=512K）</li>
+<li><strong>T</strong> — LQFP封装</li>
+<li><strong>6</strong> — 工业级温度范围 -40°C~85°C</li>
+</ul>
+<h2 id="_2">产品子系列</h2>
+<table>
+<thead>
+<tr>
+<th>子系列</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STM32F101xx</td>
+<td>基本型</td>
+</tr>
+<tr>
+<td>STM32F102xx</td>
+<td>USB基本型，USB 2.0全速设备</td>
+</tr>
+<tr>
+<td>STM32F103xx</td>
+<td>增强型，最常用</td>
+</tr>
+<tr>
+<td>STM32F105xx/107xx</td>
+<td>互联型，支持以太网、USB OTG</td>
+</tr>
+<tr>
+<td>STM32F407xx</td>
+<td>高性能型，Cortex-M4内核，168MHz</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">技术文档体系</h2>
+<ul>
+<li><strong>数据手册（Datasheet）</strong>：芯片选型用，包含引脚分配、电气特性、封装信息</li>
+<li><strong>参考手册（Reference Manual）</strong>：编程设计用，包含功能模块内部结构、寄存器配置</li>
+<li><strong>编程手册</strong>：Cortex-M内核、SysTick定时器和NVIC的详细说明</li>
+</ul>
+<p>在Keil中可通过 HELP → Open Books Window 快速查阅参考手册和数据手册。</p>
+<h2 id="_4">相关主题</h2>
+<ul>
+<li><a href="dev-environment.html">[link]</a> — 开发环境搭建</li>
+<li><a href="clock-system-rcc.html">[link]</a> — 时钟系统配置</li>
+<li><a href="gpio.html">[link]</a> — GPIO外设</li>
+<li><a href="hal-quick-reference.html">[link]</a> — HAL库函数速查</li>
+</ul>
+<h2 id="_5">来源</h2>
+<ul>
+<li><code>STM32中文参考手册-d6b837d883a4fc591e904f0c42858d9a.pdf</code> — STM32F10xxx完整中文参考手册（754页），涵盖所有外设模块</li>
+<li><code>KEIL中参考手册和数据手册的查找.docx</code> — Keil中查找技术文档的方法</li>
+<li><code>STM32F407VE_核心板_原理图_V3.2.pdf</code> — STM32F407VE核心板原理图</li>
+<li><code>第一章 嵌入式系统概要V1-fang.pptx</code> — 嵌入式系统概述课件</li>
+<li><code>第二章 STM32微控制器的硬件电路设计.pptx</code> — 硬件电路设计课件</li>
+</ul>
+</body>
+</html>

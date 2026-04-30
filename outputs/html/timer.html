@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Timer</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="_1">定时器</h1>
+<p>STM32定时器是对周期脉冲信号的计数单元，通常对外设时钟信号进行计数。使用时需关注三点：位宽、计数值和计数溢出操作。</p>
+<h2 id="_2">核心概念</h2>
+<ul>
+<li><strong>时钟频率</strong>：传递给定时器的周期性时钟信号频率</li>
+<li><strong>计数时钟 CK_CNT</strong>：经预分频后的实际计数时钟</li>
+<li><strong>预分频系数 PSC</strong>：<code>fCK_CNT = fTIM_CLK / (PSC + 1)</code></li>
+<li><strong>自动重装载值 ARR</strong>：计数达到 ARR 时产生溢出</li>
+<li><strong>定时周期公式</strong>：<code>T = (ARR + 1) * (PSC + 1) / fTIM_CLK</code></li>
+</ul>
+<h3 id="_3">计算示例</h3>
+<p>168MHz 时钟下实现 100ms 定时：
+- PSC = 16800 - 1，ARR = 1000 - 1
+- T = 1000 × 16800 / 168000000 = 0.1s</p>
+<blockquote>
+<p>注意：PSC 范围 0~65535，16位定时器 ARR 范围 0~65535，32位定时器 ARR 范围 0~4294967295。</p>
+</blockquote>
+<h2 id="stm32f407">STM32F407 定时器分类</h2>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>分类</th>
+<th>位数</th>
+<th>计数模式</th>
+<th>捕获/比较通道</th>
+<th>互补输出</th>
+<th>默认时钟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TIM1、TIM8</td>
+<td>高级定时器</td>
+<td>16</td>
+<td>上/下/双向</td>
+<td>4</td>
+<td>有</td>
+<td>168MHz</td>
+</tr>
+<tr>
+<td>TIM2、TIM5</td>
+<td>通用定时器</td>
+<td>32</td>
+<td>上/下/双向</td>
+<td>4</td>
+<td>无</td>
+<td>84MHz</td>
+</tr>
+<tr>
+<td>TIM3、TIM4</td>
+<td>通用定时器</td>
+<td>16</td>
+<td>上/下/双向</td>
+<td>4</td>
+<td>无</td>
+<td>84MHz</td>
+</tr>
+<tr>
+<td>TIM6、TIM7</td>
+<td>基本定时器</td>
+<td>16</td>
+<td>上/下/双向</td>
+<td>0</td>
+<td>无</td>
+<td>84MHz</td>
+</tr>
+<tr>
+<td>TIM9</td>
+<td>通用定时器</td>
+<td>16</td>
+<td>向上</td>
+<td>2</td>
+<td>无</td>
+<td>168MHz</td>
+</tr>
+<tr>
+<td>TIM10~14</td>
+<td>通用定时器</td>
+<td>16</td>
+<td>向上</td>
+<td>1</td>
+<td>无</td>
+<td>84/168MHz</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>TIM1/TIM8 互补输出常用于<strong>电机控制</strong></li>
+<li>TIM2/TIM5 为32位，可用于<strong>测量高频信号频率</strong></li>
+</ul>
+<h2 id="pwm">PWM 输出</h2>
+<p>PWM 信号三要素：
+1. <strong>频率</strong> — 控制音调（如蜂鸣器）或电机转速
+2. <strong>占空比</strong> — 控制功率/音量（典型值50%）
+3. <strong>脉冲持续个数</strong> — 控制时长</p>
+<p>PWM 硬件输出相比软件模拟翻转IO的优势：控制维度更全面、CPU无需持续干预、波形更平滑。</p>
+<h2 id="hal">HAL库常用函数</h2>
+<pre><code class="language-c">HAL_TIM_Base_Start_IT(&amp;htim);           // 启动定时器（中断方式）
+HAL_TIM_PWM_Start(&amp;htim, channel);      // 启动PWM输出
+HAL_TIM_IC_Start(&amp;htim, channel);       // 启动输入捕获
+HAL_TIM_Encoder_Start(&amp;htim, channels); // 启动编码器模式
+</code></pre>
+<h2 id="_4">回调函数</h2>
+<pre><code class="language-c">HAL_TIM_PeriodElapsedCallback(&amp;htim);       // 周期溢出回调
+HAL_TIM_IC_CaptureCallback(&amp;htim);          // 输入捕获回调
+HAL_TIM_PWM_PulseFinishedCallback(&amp;htim);   // PWM脉冲完成回调
+</code></pre>
+<h2 id="_5">相关主题</h2>
+<ul>
+<li><a href="clock-system-rcc.html">[link]</a> — 定时器时钟来源</li>
+<li><a href="hal-quick-reference.html">[link]</a> — 完整HAL函数速查</li>
+<li><a href="sensors-and-modules.html">[link]</a> — 蜂鸣器PWM控制、步进电机脉冲控制</li>
+<li><a href="freertos-basics.html">[link]</a> — RTOS中的软件定时器</li>
+</ul>
+<h2 id="_6">来源</h2>
+<ul>
+<li><code>实验08_STM32定时器应用实验(V25).pdf</code> — 定时器基本概念、分类、定时周期计算与CubeMX配置（22页）</li>
+<li><code>自选实验2-1_乐曲播放实验(V25).pdf</code> — PWM控制蜂鸣器播放MIDI音乐（19页）</li>
+<li><code>第八章 定时器V3.pptx</code> — 定时器课件</li>
+<li><code>index.md</code> — HAL库定时器函数速查</li>
+</ul>
+</body>
+</html>

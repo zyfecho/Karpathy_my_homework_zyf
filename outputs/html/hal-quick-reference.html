@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Hal Quick Reference</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="hal">HAL 库函数速查</h1>
+<p>STM32 HAL（Hardware Abstraction Layer）库提供统一的外设操作接口。大多数外设支持三种工作方式：阻塞（Polling）、中断（IT）和 DMA。</p>
+<h2 id="gpio">GPIO</h2>
+<pre><code class="language-c">HAL_GPIO_WritePin(端口, 引脚号, 电平状态);   // 写引脚电平
+HAL_GPIO_ReadPin(端口, 引脚号);             // 读引脚电平
+HAL_GPIO_TogglePin(端口, 引脚号);           // 翻转引脚电平
+</code></pre>
+<h2 id="uart">UART</h2>
+<pre><code class="language-c">HAL_UART_Transmit(&amp;huart, pData, Size, Timeout);       // 发送（阻塞）
+HAL_UART_Receive(&amp;huart, pData, Size, Timeout);        // 接收（阻塞）
+HAL_UART_Transmit_IT(&amp;huart, pData, Size);             // 发送（中断）
+HAL_UART_Receive_IT(&amp;huart, pData, Size);              // 接收（中断）
+HAL_UART_Transmit_DMA(&amp;huart, pData, Size);            // 发送（DMA）
+HAL_UART_Receive_DMA(&amp;huart, pData, Size);             // 接收（DMA）
+</code></pre>
+<h2 id="i2c">I2C</h2>
+<pre><code class="language-c">HAL_I2C_Master_Transmit(&amp;hi2c, DevAddr, pData, Size, Timeout);    // 主机发送（阻塞）
+HAL_I2C_Master_Receive(&amp;hi2c, DevAddr, pData, Size, Timeout);     // 主机接收（阻塞）
+HAL_I2C_Master_Transmit_IT(&amp;hi2c, DevAddr, pData, Size);          // 主机发送（中断）
+HAL_I2C_Master_Receive_IT(&amp;hi2c, DevAddr, pData, Size);           // 主机接收（中断）
+HAL_I2C_Master_Transmit_DMA(&amp;hi2c, DevAddr, pData, Size);         // 主机发送（DMA）
+HAL_I2C_Master_Receive_DMA(&amp;hi2c, DevAddr, pData, Size);          // 主机接收（DMA）
+</code></pre>
+<h2 id="spi">SPI</h2>
+<pre><code class="language-c">HAL_SPI_Transmit(&amp;hspi, pData, Size, Timeout);                         // 发送（阻塞）
+HAL_SPI_Receive(&amp;hspi, pData, Size, Timeout);                          // 接收（阻塞）
+HAL_SPI_TransmitReceive(&amp;hspi, pTxData, pRxData, Size, Timeout);      // 同时收发（阻塞）
+HAL_SPI_Transmit_IT(&amp;hspi, pData, Size);                               // 发送（中断）
+HAL_SPI_Receive_IT(&amp;hspi, pData, Size);                                // 接收（中断）
+HAL_SPI_TransmitReceive_IT(&amp;hspi, pTxData, pRxData, Size);            // 同时收发（中断）
+HAL_SPI_Transmit_DMA(&amp;hspi, pData, Size);                              // 发送（DMA）
+HAL_SPI_Receive_DMA(&amp;hspi, pData, Size);                               // 接收（DMA）
+HAL_SPI_TransmitReceive_DMA(&amp;hspi, pTxData, pRxData, Size);           // 同时收发（DMA）
+</code></pre>
+<h2 id="_1">定时器</h2>
+<pre><code class="language-c">HAL_TIM_Base_Start(&amp;htim);                     // 启动基本定时器
+HAL_TIM_Base_Start_IT(&amp;htim);                  // 启动基本定时器（中断）
+HAL_TIM_PWM_Start(&amp;htim, Channel);             // 启动PWM输出
+HAL_TIM_IC_Start(&amp;htim, Channel);              // 启动输入捕获
+HAL_TIM_Encoder_Start(&amp;htim, Channels);        // 启动编码器模式
+</code></pre>
+<h2 id="adc">ADC</h2>
+<pre><code class="language-c">HAL_ADC_Start(&amp;hadc);                          // 启动ADC（阻塞）
+HAL_ADC_Start_IT(&amp;hadc);                       // 启动ADC（中断）
+HAL_ADC_Start_DMA(&amp;hadc, pData, Length);       // 启动ADC（DMA）
+HAL_ADC_PollForConversion(&amp;hadc, Timeout);     // 等待转换完成
+HAL_ADC_GetValue(&amp;hadc);                       // 获取采样值
+</code></pre>
+<h2 id="_2">中断/事件回调函数</h2>
+<pre><code class="language-c">HAL_GPIO_EXTI_Callback(GPIO_Pin);                          // GPIO外部中断
+HAL_UART_TxCpltCallback(&amp;huart);                           // UART发送完成
+HAL_UART_RxCpltCallback(&amp;huart);                           // UART接收完成
+HAL_UARTEx_RxEventCallback(&amp;huart, Size);                  // UART接收事件（IDLE）
+HAL_I2C_MasterTxCpltCallback(&amp;hi2c);                       // I2C主机发送完成
+HAL_I2C_MasterRxCpltCallback(&amp;hi2c);                       // I2C主机接收完成
+HAL_SPI_TxCpltCallback(&amp;hspi);                             // SPI发送完成
+HAL_SPI_RxCpltCallback(&amp;hspi);                             // SPI接收完成
+HAL_SPI_TxRxCpltCallback(&amp;hspi);                           // SPI收发完成
+HAL_ADC_ConvCpltCallback(&amp;hadc);                           // ADC转换完成
+HAL_TIM_PeriodElapsedCallback(&amp;htim);                      // 定时器周期溢出
+HAL_TIM_IC_CaptureCallback(&amp;htim);                         // 输入捕获完成
+HAL_TIM_PWM_PulseFinishedCallback(&amp;htim);                  // PWM脉冲完成
+</code></pre>
+<h2 id="_3">相关主题</h2>
+<ul>
+<li><a href="gpio.html">[link]</a> | <a href="uart.html">[link]</a> | <a href="i2c.html">[link]</a> | <a href="spi.html">[link]</a> | <a href="timer.html">[link]</a> — 各外设详细说明</li>
+</ul>
+<h2 id="_4">来源</h2>
+<ul>
+<li><code>index.md</code> — HAL库函数速查手册原始文件</li>
+</ul>
+</body>
+</html>

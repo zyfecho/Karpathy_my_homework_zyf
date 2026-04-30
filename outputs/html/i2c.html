@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>I2C</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="i2c">I2C 通信</h1>
+<p>I2C（IIC）是由飞利浦公司开发的两线式同步串行总线协议，半双工，一主多从结构。使用SCL（时钟线）和SDA（数据线）两根线。</p>
+<h2 id="_1">协议要点</h2>
+<h3 id="_2">信号定义</h3>
+<ul>
+<li><strong>起始信号</strong>：SCL高电平期间，SDA从高拉低</li>
+<li><strong>停止信号</strong>：SCL高电平期间，SDA从低拉高</li>
+<li><strong>数据有效</strong>：SCL高时读取SDA（SDA不可跳变）；SCL低时写入SDA（SDA可跳变）</li>
+</ul>
+<h3 id="_3">通信流程</h3>
+<ol>
+<li>主机发送起始信号</li>
+<li>发送7位从设备地址 + 1位读/写方向位</li>
+<li>等待从设备ACK应答</li>
+<li>传输数据，每字节后需ACK应答</li>
+<li>主机发送停止信号</li>
+</ol>
+<h3 id="_4">关键特性</h3>
+<ul>
+<li><strong>开漏输出 + 上拉电阻</strong>：I2C引脚采用开漏模式，总线空闲时由上拉电阻保持高电平</li>
+<li><strong>ACK应答</strong>：接收方在每字节后拉低SDA表示确认</li>
+<li><strong>重复起始</strong>：不发停止信号直接发新的起始信号，用于读寄存器等复合操作</li>
+<li>相比 <a href="spi.html">[link]</a> 速度较低，但只需两根线</li>
+</ul>
+<h2 id="i2c-vs-i2c">硬件I2C vs 软件模拟I2C</h2>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬件I2C</td>
+<td>使用MCU的I2C外设和专用引脚，效率高，代码简单，调用控制函数即可</td>
+</tr>
+<tr>
+<td>软件模拟I2C</td>
+<td>用任意GPIO模拟时序，更灵活，不受引脚限制，移植方便，低速场景更常用</td>
+</tr>
+</tbody>
+</table>
+<h2 id="oledi2c">OLED显示屏驱动（I2C应用）</h2>
+<ul>
+<li>常见0.96寸单色OLED，分辨率128×64，驱动IC为SSD1306</li>
+<li>通信方式：I2C或SPI</li>
+<li>驱动文件中需注意 <code>SSD1306_i2c.c</code> 中的引脚宏定义是否与实际接线一致</li>
+</ul>
+<h2 id="hal">HAL库函数</h2>
+<pre><code class="language-c">// 阻塞方式
+HAL_I2C_Master_Transmit(&amp;hi2c, DevAddr, pData, Size, Timeout);
+HAL_I2C_Master_Receive(&amp;hi2c, DevAddr, pData, Size, Timeout);
+
+// 中断方式
+HAL_I2C_Master_Transmit_IT(&amp;hi2c, DevAddr, pData, Size);
+HAL_I2C_Master_Receive_IT(&amp;hi2c, DevAddr, pData, Size);
+
+// DMA方式
+HAL_I2C_Master_Transmit_DMA(&amp;hi2c, DevAddr, pData, Size);
+HAL_I2C_Master_Receive_DMA(&amp;hi2c, DevAddr, pData, Size);
+</code></pre>
+<h2 id="_5">相关主题</h2>
+<ul>
+<li><a href="gpio.html">[link]</a> — I2C使用开漏输出+上拉配置</li>
+<li><a href="spi.html">[link]</a> — 另一种同步串行协议，速度更快</li>
+<li><a href="uart.html">[link]</a> — 异步串行通信</li>
+<li><a href="hal-quick-reference.html">[link]</a> — 完整HAL函数速查</li>
+<li><a href="sensors-and-modules.html">[link]</a> — OLED模块I2C驱动</li>
+<li><a href="interview-guide.html">[link]</a> — 面试常考I2C协议细节</li>
+</ul>
+<h2 id="_6">来源</h2>
+<ul>
+<li><code>实验07_GUI应用实验(V25).pdf</code> — I2C总线原理、硬件/软件I2C对比、OLED驱动实验（32页）</li>
+<li><code>八股默写.docx</code> — I2C协议要点：开漏+上拉、ACK、重复起始、读寄存器流程</li>
+<li><code>index.md</code> — HAL库I2C函数速查</li>
+</ul>
+</body>
+</html>

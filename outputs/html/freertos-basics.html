@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Freertos Basics</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="freertos">FreeRTOS 基础</h1>
+<p>FreeRTOS 是业内流行的嵌入式实时操作系统（RTOS），适用于 ARM Cortex-M 内核处理器。它解决了裸机系统在复杂项目中实时性差、程序结构难以维护的问题。</p>
+<h2 id="rtos">为什么需要 RTOS</h2>
+<h3 id="_1">裸机系统的缺陷</h3>
+<ul>
+<li>后台程序在 main 中循环顺序执行，实时性难以保证</li>
+<li>如果某个功能（如按键消抖延时）耗时过长，同一循环中的其他功能（如数码管显示）会受严重影响</li>
+<li>用中断或时间片计数可以缓解，但程序复杂后过多中断使代码难以阅读和维护</li>
+<li>有经验的开发人员会尽力少用中断、慎用中断</li>
+</ul>
+<h3 id="_2">多任务系统的优势</h3>
+<ul>
+<li>将功能划分为多个独立任务，每个任务是一个简单的死循环</li>
+<li>任务有优先级，高优先级任务优先执行，实时性更好</li>
+<li>各功能模块独立互不干扰，由操作系统调度管理</li>
+<li>开发难度相对减小</li>
+</ul>
+<h2 id="_3">嵌入式操作系统分类</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>需要MMU</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>复杂操作系统</td>
+<td>是</td>
+<td>Linux、安卓、iOS</td>
+</tr>
+<tr>
+<td>实时操作系统（RTOS）</td>
+<td>否</td>
+<td>FreeRTOS、RT-Thread、μC/OS、OpenHarmony</td>
+</tr>
+</tbody>
+</table>
+<p>ARM Cortex-M 内核只能运行 RTOS。</p>
+<h2 id="rtos_1">常见嵌入式 RTOS</h2>
+<ul>
+<li>FreeRTOS（本知识库重点）</li>
+<li>μC/OS-II / μC/OS-III</li>
+<li>RT-Thread</li>
+<li>μClinux</li>
+<li>Huawei OpenHarmony</li>
+</ul>
+<p>FreeRTOS 官网：www.freertos.org</p>
+<h2 id="rtos_2">RTOS 任务结构</h2>
+<p>每个任务负责一部分功能，通常是一个死循环。任务之间通过抢占、阻塞/等待、中断等机制切换。</p>
+<h2 id="_4">相关主题</h2>
+<ul>
+<li><a href="freertos-task-management.html">[link]</a> — 任务创建、挂起、恢复与优先级管理</li>
+<li><a href="freertos-ipc.html">[link]</a> — 任务间通信：消息队列、信号量、互斥锁</li>
+<li><a href="timer.html">[link]</a> — RTOS 中的软件定时器与硬件定时器</li>
+<li><a href="uart.html">[link]</a> — 基于 RTOS 的串口通信设计</li>
+</ul>
+<h2 id="_5">来源</h2>
+<ul>
+<li><code>实验03_RTOS基本应用实验(V25).pdf</code> — 裸机系统缺陷分析、多任务系统概念、FreeRTOS简介（29页）</li>
+<li><code>任务调度方式与任务状态.docx</code> — 任务调度方式总结，每个时刻只执行一个任务，优先级范围0-31</li>
+<li><code>第一章 嵌入式系统概要V1-fang.pptx</code> — 嵌入式系统概述课件</li>
+</ul>
+</body>
+</html>

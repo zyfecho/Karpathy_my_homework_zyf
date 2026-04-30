@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Clock System Rcc</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="rcc">时钟系统与RCC配置</h1>
+<p>STM32的时钟系统是整个芯片运行的基础。RCC（Reset and Clock Control）模块负责管理所有时钟源和时钟分配。在CubeMX中正确配置RCC是项目开发的第一步。</p>
+<h2 id="_1">外部时钟源选择</h2>
+<p>CubeMX中HSE（高速外部时钟）有两种配置模式：</p>
+<h3 id="crystalceramic-resonator">Crystal/Ceramic Resonator（晶体模式）</h3>
+<ul>
+<li>芯片内部反相放大器与外部晶体共同构成振荡电路</li>
+<li>需要连接：一个无源晶体（如8MHz）+ 两个匹配电容（如20pF）</li>
+<li>成本低，精度足够，适用于绝大多数应用</li>
+<li>需要仔细PCB布局，晶体要靠近MCU</li>
+</ul>
+<h3 id="clock-source-bypass">Clock Source / Bypass（旁路模式）</h3>
+<ul>
+<li>绕过芯片内部振荡器放大器，直接输入外部数字时钟信号</li>
+<li>需要连接：有源晶振或其它MCU提供的时钟信号</li>
+<li>精度更高，抗干扰能力强，但成本较高</li>
+<li>适用于USB主机/设备、以太网、多设备严格时钟同步等场景</li>
+</ul>
+<h3 id="_2">选择建议</h3>
+<p><strong>绝大多数情况选 Crystal/Ceramic Resonator 模式。</strong> 理由：
+1. 无源晶体成本低
+2. 对UART/SPI/I2C等常见外设精度足够
+3. 资料和参考设计最多</p>
+<p>仅在以下情况考虑 Bypass：时钟精度要求极高、多设备需严格同步、PCB空间极度紧张。</p>
+<blockquote>
+<p>开发板上的8MHz/12MHz银色小方块就是无源晶体，应配置为 Crystal 模式。</p>
+</blockquote>
+<h2 id="_3">相关主题</h2>
+<ul>
+<li><a href="stm32-overview.html">[link]</a> — STM32产品概述</li>
+<li><a href="dev-environment.html">[link]</a> — CubeMX配置入口</li>
+<li><a href="timer.html">[link]</a> — 定时器时钟来源于RCC</li>
+</ul>
+<h2 id="_4">来源</h2>
+<ul>
+<li><code>CUBEMX配置：RCC电源选择.docx</code> — Crystal与Bypass模式的详细对比分析与选择建议</li>
+</ul>
+</body>
+</html>

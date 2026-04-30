@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Spi</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="spi">SPI 通信</h1>
+<p>SPI（Serial Peripheral Interface）是一种全双工、同步、串行通信协议，支持多主机多从机结构，速度比 <a href="i2c.html">[link]</a> 更快。</p>
+<h2 id="_1">信号线</h2>
+<table>
+<thead>
+<tr>
+<th>信号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOSI</td>
+<td>Master Out Slave In — 主机输出，从机接收</td>
+</tr>
+<tr>
+<td>MISO</td>
+<td>Master In Slave Out — 主机接收，从机输出</td>
+</tr>
+<tr>
+<td>SCL/SCLK</td>
+<td>时钟信号，由主机产生，用于同步</td>
+</tr>
+<tr>
+<td>CS/SS</td>
+<td>片选信号，低电平有效，选择从设备</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">特点</h2>
+<ul>
+<li><strong>全双工</strong>：MOSI和MISO同时工作，可同时收发</li>
+<li><strong>同步通信</strong>：由SCL时钟线同步</li>
+<li><strong>多从机</strong>：每个从机一根CS线，主机通过拉低对应CS选择通信对象</li>
+<li><strong>速度快</strong>：相比I2C，SPI没有地址开销和ACK机制，吞吐量更高</li>
+<li><strong>线数多</strong>：至少4根线（MOSI/MISO/SCL/CS），从机越多CS线越多</li>
+</ul>
+<h2 id="hal">HAL库函数</h2>
+<pre><code class="language-c">// 阻塞方式
+HAL_SPI_Transmit(&amp;hspi, pData, Size, Timeout);
+HAL_SPI_Receive(&amp;hspi, pData, Size, Timeout);
+HAL_SPI_TransmitReceive(&amp;hspi, pTxData, pRxData, Size, Timeout);
+
+// 中断方式
+HAL_SPI_Transmit_IT(&amp;hspi, pData, Size);
+HAL_SPI_Receive_IT(&amp;hspi, pData, Size);
+HAL_SPI_TransmitReceive_IT(&amp;hspi, pTxData, pRxData, Size);
+
+// DMA方式
+HAL_SPI_Transmit_DMA(&amp;hspi, pData, Size);
+HAL_SPI_Receive_DMA(&amp;hspi, pData, Size);
+HAL_SPI_TransmitReceive_DMA(&amp;hspi, pTxData, pRxData, Size);
+</code></pre>
+<h2 id="_3">回调函数</h2>
+<pre><code class="language-c">HAL_SPI_TxCpltCallback(&amp;hspi);       // 发送完成
+HAL_SPI_RxCpltCallback(&amp;hspi);       // 接收完成
+HAL_SPI_TxRxCpltCallback(&amp;hspi);     // 同时收发完成
+</code></pre>
+<h2 id="_4">相关主题</h2>
+<ul>
+<li><a href="i2c.html">[link]</a> — 另一种同步串行协议，线数少但速度较低</li>
+<li><a href="uart.html">[link]</a> — 异步串行通信</li>
+<li><a href="hal-quick-reference.html">[link]</a> — 完整HAL函数速查</li>
+<li><a href="interview-guide.html">[link]</a> — 面试常考SPI与I2C对比</li>
+</ul>
+<h2 id="_5">来源</h2>
+<ul>
+<li><code>八股默写.docx</code> — SPI协议要点：MOSI/MISO/SCL/CS、全双工同步</li>
+<li><code>index.md</code> — HAL库SPI函数速查</li>
+</ul>
+</body>
+</html>

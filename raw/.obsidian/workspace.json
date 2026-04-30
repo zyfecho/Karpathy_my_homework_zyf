@@ -1,0 +1,190 @@
+{
+  "main": {
+    "id": "1a984a02b9c8b879",
+    "type": "split",
+    "children": [
+      {
+        "id": "777a40163e183aaa",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d0a645befd498cb7",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "CC switch配置CC教程（使用LX API中转站）.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "CC switch配置CC教程（使用LX API中转站）"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8393f47e5af94eee",
+    "type": "split",
+    "children": [
+      {
+        "id": "99047f1bb60e8a8e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7b94bd4b2466d518",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "d12b9d9e6113eb3e",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "f80a53246a8baab4",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "72b94ca81cc1135c",
+    "type": "split",
+    "children": [
+      {
+        "id": "d8bac1b04df2e693",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "279cb6e4a68b4502",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "实验06_基于RTOS的串口通信实验(V25).pdf",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "实验06_基于RTOS的串口通信实验(V25) 的反向链接列表"
+            }
+          },
+          {
+            "id": "9c5876bbf0163d80",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "实验06_基于RTOS的串口通信实验(V25).pdf",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "实验06_基于RTOS的串口通信实验(V25) 的出链列表"
+            }
+          },
+          {
+            "id": "27c907f26296b111",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "4ba7c44dc0eb930c",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "260ee04681d50007",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "实验06_基于RTOS的串口通信实验(V25).pdf",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "实验06_基于RTOS的串口通信实验(V25) 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "d0a645befd498cb7",
+  "lastOpenFiles": [
+    "实验07_GUI应用实验(V25).pdf",
+    "实验06_基于RTOS的串口通信实验(V25).pdf",
+    "实验03_RTOS基本应用实验(V25).pdf"
+  ]
+}

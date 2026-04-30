@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Interview Guide</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="_1">嵌入式面试指南</h1>
+<p>嵌入式软件开发面试常考的通信协议对比、C语言关键字等八股文知识点。</p>
+<h2 id="_2">通信协议对比</h2>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>双工</th>
+<th>同步/异步</th>
+<th>线数</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="uart.html">[link]</a> (TTL)</td>
+<td>全双工</td>
+<td>异步</td>
+<td>2 (TX, RX)</td>
+<td>最基本的串口通信</td>
+</tr>
+<tr>
+<td>RS232</td>
+<td>全双工</td>
+<td>异步</td>
+<td>2</td>
+<td>负逻辑电平，拉低开始通信</td>
+</tr>
+<tr>
+<td>RS485</td>
+<td>半双工</td>
+<td>异步</td>
+<td>2</td>
+<td>差分信号，抑制共模干扰，适合远距离</td>
+</tr>
+<tr>
+<td><a href="i2c.html">[link]</a></td>
+<td>半双工</td>
+<td>同步</td>
+<td>2 (SDA, SCL)</td>
+<td>一主多从，速度较低</td>
+</tr>
+<tr>
+<td><a href="spi.html">[link]</a></td>
+<td>全双工</td>
+<td>同步</td>
+<td>4+ (MOSI, MISO, SCL, CS)</td>
+<td>多主多从，速度快</td>
+</tr>
+</tbody>
+</table>
+<h3 id="i2c">I2C 重点细节</h3>
+<ul>
+<li>开漏输出 + 上拉电阻</li>
+<li>ACK 由接收方发送</li>
+<li>重复起始条件（不发停止直接发新起始）</li>
+<li>I2C 读寄存器流程</li>
+</ul>
+<h3 id="spi-vs-i2c">SPI vs I2C</h3>
+<ul>
+<li>SPI 速度更快，全双工</li>
+<li>I2C 线数少，支持多从机寻址</li>
+<li>I2C 有 ACK 确认机制，SPI 没有</li>
+</ul>
+<h2 id="c">C 语言关键字</h2>
+<h3 id="static">static 的三个作用</h3>
+<ol>
+<li><strong>控制变量生命周期</strong>：静态局部变量只初始化一次，存放在 BSS 或 DATA 段，函数结束后不被清除（普通局部变量在栈上，函数结束即清除）</li>
+<li><strong>控制作用域（全局变量）</strong>：static 全局变量只在当前 .c 文件可见</li>
+<li><strong>控制函数可见性</strong>：static 函数为内部函数，不能被其他 .c 文件通过 extern 调用</li>
+</ol>
+<h2 id="_3">相关主题</h2>
+<ul>
+<li><a href="uart.html">[link]</a> | <a href="i2c.html">[link]</a> | <a href="spi.html">[link]</a> — 各协议详细说明</li>
+<li><a href="hal-quick-reference.html">[link]</a> — HAL 库函数速查</li>
+<li><a href="career-advice.html">[link]</a> — 求职经验与简历技巧</li>
+</ul>
+<h2 id="_4">来源</h2>
+<ul>
+<li><code>八股默写.docx</code> — UART/RS232/RS485/I2C/SPI 协议要点与 C 语言 static 关键字</li>
+<li><code>嵌入式软件开发笔试面试指南(1).pdf</code> — 嵌入式面试指南（加密PDF，未能提取内容）</li>
+</ul>
+</body>
+</html>

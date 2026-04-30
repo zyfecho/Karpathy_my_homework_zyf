@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Freertos Ipc</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="freertos">FreeRTOS 任务间通信</h1>
+<p>在 RTOS 应用中，任务间通信应使用信号量、消息队列等机制，而非全局变量。全局变量会增加耦合度、降低内聚性、影响封装性和可维护性。</p>
+<h2 id="_1">为什么不用全局变量</h2>
+<ul>
+<li>增加耦合度，降低内聚性，不符合软件设计思想</li>
+<li>影响封装性、移植性和可读性</li>
+<li>过多全局变量严重降低代码可维护性和稳定性</li>
+<li>信号量和消息队列可以将任务阻塞，避免抢占CPU资源</li>
+</ul>
+<h2 id="cmsis">CMSIS 常见通信方式</h2>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>消息队列（Message Queues）</td>
+<td>最基础的通信方式，其他方式多基于此实现</td>
+</tr>
+<tr>
+<td>信号量（Semaphores）</td>
+<td>用于任务同步和资源计数</td>
+</tr>
+<tr>
+<td>互斥锁（Mutexes）</td>
+<td>用于互斥访问共享资源，防止优先级反转</td>
+</tr>
+<tr>
+<td>任务通知（Notifications）</td>
+<td>轻量级，不基于消息队列，详见 <a href="freertos-task-management.html">[link]</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">消息队列</h2>
+<h3 id="_3">核心概念</h3>
+<ul>
+<li>支持任务与任务间、中断与任务间传递消息</li>
+<li>数据结构：<strong>FIFO</strong>（先入先出）缓冲区</li>
+<li>创建时需设定<strong>深度</strong>（最大单元数）和<strong>单元大小</strong></li>
+</ul>
+<h3 id="_4">阻塞机制</h3>
+<ul>
+<li>读取空队列时，任务可指定阻塞超时时间</li>
+<li>在超时时间内，任务保持阻塞状态等待新消息</li>
+<li>其他任务或中断写入数据后，阻塞任务自动转入就绪状态</li>
+</ul>
+<h3 id="_5">写入机制</h3>
+<ul>
+<li>写入满队列时，任务同样可以阻塞等待</li>
+<li>支持从队列头部或尾部写入</li>
+</ul>
+<h2 id="_6">信号量</h2>
+<ul>
+<li><strong>二值信号量</strong>：类似标志位，用于任务同步</li>
+<li><strong>计数信号量</strong>：用于资源计数，如限制同时访问某资源的任务数</li>
+</ul>
+<h2 id="_7">互斥锁</h2>
+<ul>
+<li>特殊的二值信号量，带有优先级继承机制</li>
+<li>防止优先级反转问题</li>
+<li>用于保护共享资源的互斥访问</li>
+</ul>
+<h2 id="_8">相关主题</h2>
+<ul>
+<li><a href="freertos-basics.html">[link]</a> — FreeRTOS 基础概念</li>
+<li><a href="freertos-task-management.html">[link]</a> — 任务管理与任务通知</li>
+<li><a href="uart.html">[link]</a> — 基于 RTOS 的串口通信实验</li>
+</ul>
+<h2 id="_9">来源</h2>
+<ul>
+<li><code>实验05_RTOS任务间通信实验(V25).pdf</code> — 消息队列、信号量、互斥锁原理与实验（33页）</li>
+</ul>
+</body>
+</html>

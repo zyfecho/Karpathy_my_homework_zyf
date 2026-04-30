@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Dev Environment</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="_1">开发环境搭建</h1>
+<p>STM32开发需要两个核心工具：Keil MDK（编译调试）和 STM32CubeMX（图形化配置与代码生成）。两者安装的固件库功能不同，互为补充。</p>
+<h2 id="keil-mdk">Keil MDK 安装</h2>
+<ol>
+<li>运行 <code>MDK.exe</code>，一路 Next 完成安装</li>
+<li>激活：以管理员身份运行 <code>keygen.exe</code>，打开 FILE → License Management，复制 CID 到 keygen，Target 选 ARM，生成密钥后粘贴到 LIC 栏，点击 ADD LIC</li>
+<li>安装固件库：双击 <code>KEIL.STM32F1XX_DFP.2.4.0.pack</code>（或对应芯片型号的包）</li>
+<li>安装编辑器插件（详见视频教程）</li>
+</ol>
+<h3 id="_2">调试器识别问题</h3>
+<p>魔术棒 → Debug → Settings，如果 SWDIO 处未识别到设备，需安装 <code>WCH-LinkUtility/Drv_Link/</code> 下的驱动。安装后可在设备管理器中确认。</p>
+<h2 id="stm32cubemx">STM32CubeMX 安装</h2>
+<ol>
+<li>双击 <code>setupcubemx.exe</code> 安装</li>
+<li>打开后点击 HELP → Manage embedded software packages</li>
+<li>如遇报错，在任务管理器中结束 OPENJDK 进程后重试</li>
+<li>选择所需的 STM32F1/F4 等固件包，点击 INSTALL</li>
+<li>如提示登录，需要 ST 官网账号</li>
+</ol>
+<h2 id="_3">两种固件库的区别</h2>
+<table>
+<thead>
+<tr>
+<th>固件库</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keil MDK 固件库</td>
+<td><strong>芯片支持包</strong>，让编译器识别芯片的内存地址、外设地址等底层信息，用于编译和调试</td>
+</tr>
+<tr>
+<td>CubeMX 固件库</td>
+<td><strong>硬件抽象层库（HAL）+ 示例代码</strong>，通过库函数操作芯片外设，无需直接操作寄存器</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">参考视频</h2>
+<ul>
+<li>Keil5和STM32CubeMX安装：<a href="https://www.bilibili.com/video/BV16GWEz8EfK">BV16GWEz8EfK</a></li>
+<li>Keil固件库下载：<a href="https://www.bilibili.com/video/BV1VC4y1k7iC">BV1VC4y1k7iC</a></li>
+</ul>
+<h2 id="_5">相关主题</h2>
+<ul>
+<li><a href="stm32-overview.html">[link]</a> — STM32产品概述</li>
+<li><a href="clock-system-rcc.html">[link]</a> — CubeMX中RCC时钟配置</li>
+<li><a href="dev-tools-ai.html">[link]</a> — AI辅助开发工具</li>
+</ul>
+<h2 id="_6">来源</h2>
+<ul>
+<li><code>STM32开发工具下载Keil和CubeMX.docx</code> — Keil与CubeMX完整安装流程及固件库区别说明</li>
+<li><code>KEIL中参考手册和数据手册的查找.docx</code> — Keil中查阅技术文档的方法</li>
+<li><code>第三章 STM32微控制器开发环境的搭建V4.pptx</code> — 开发环境搭建课件</li>
+<li><code>第四章 STM32CubeMX软件的使用V3.pptx</code> — CubeMX使用课件</li>
+<li><code>第五章 MDK-ARM软件的使用V2.pptx</code> — MDK-ARM使用课件</li>
+</ul>
+</body>
+</html>

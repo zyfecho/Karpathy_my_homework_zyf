@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Gpio</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="gpio">GPIO 输入输出</h1>
+<p>GPIO（General Purpose Input/Output）是STM32最基础的外设，用于控制引脚的高低电平输出和读取外部电平输入。</p>
+<h2 id="_1">输出模式</h2>
+<h3 id="push-pull">推挽输出（Push-Pull）</h3>
+<ul>
+<li>具有强驱动能力，可主动输出高电平和低电平</li>
+<li><strong>一般不需要配置上下拉电阻</strong>（缺省模式即可）</li>
+<li>上拉+推挽：浪费电流，可能影响电平上升速度</li>
+<li>下拉+推挽：浪费电流，可能影响电平下降速度</li>
+</ul>
+<h3 id="open-drain">开漏输出（Open-Drain）</h3>
+<ul>
+<li>只能主动拉低，高电平依赖上拉电阻实现</li>
+<li><strong>必须配合上拉电阻</strong>：<code>GPIO_Mode = OUTPUT_OD; GPIO_Pull = GPIO_PULLUP</code></li>
+<li>典型应用：电平转换、<a href="i2c.html">[link]</a> 通信</li>
+</ul>
+<h2 id="_2">输出模式需要上下拉的特殊场景</h2>
+<ol>
+<li><strong>开漏输出模式</strong> — 必须配上拉</li>
+<li><strong>系统安全性要求极高</strong> — MCU上电未初始化时，配置下拉可防止引脚意外输出高电平（如电机驱动、继电器）</li>
+<li><strong>硬件设计特殊要求</strong> — 外部设备在MCU未初始化时需要确定的初始电平</li>
+</ol>
+<h2 id="_3">初始电平配置</h2>
+<ul>
+<li>推挽输出模式下，初始电平状态为高电平时默认灯灭</li>
+<li>建议不配置上下拉电阻（缺省模式）</li>
+</ul>
+<h2 id="hal">HAL库常用函数</h2>
+<pre><code class="language-c">HAL_GPIO_WritePin(端口, 引脚号, 电平状态);   // 写引脚电平
+HAL_GPIO_ReadPin(端口, 引脚号);             // 读引脚电平
+HAL_GPIO_TogglePin(端口, 引脚号);           // 翻转引脚电平
+</code></pre>
+<h2 id="_4">中断回调</h2>
+<pre><code class="language-c">HAL_GPIO_EXTI_Callback(uint16_t 引脚号);    // 外部中断回调
+</code></pre>
+<h2 id="_5">相关主题</h2>
+<ul>
+<li><a href="hal-quick-reference.html">[link]</a> — 完整HAL函数速查</li>
+<li><a href="i2c.html">[link]</a> — I2C使用开漏输出+上拉</li>
+<li><a href="clock-system-rcc.html">[link]</a> — GPIO时钟使能</li>
+<li><a href="stm32-overview.html">[link]</a> — 引脚分配与命名</li>
+</ul>
+<h2 id="_6">来源</h2>
+<ul>
+<li><code>GPIO输入输出的上下拉及引脚初始电平配置.docx</code> — 推挽/开漏模式下上下拉配置的详细分析</li>
+<li><code>index.md</code> — HAL库GPIO函数速查</li>
+<li><code>第六章 通用输入输出接口-硬件简化版.pptx</code> — GPIO接口课件</li>
+</ul>
+</body>
+</html>

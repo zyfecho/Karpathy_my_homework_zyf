@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Freertos Task Management</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f8f8f8; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1 id="freertos">FreeRTOS 任务管理</h1>
+<p>FreeRTOS 提供完整的任务生命周期管理，包括创建、挂起、恢复、删除和优先级调整。CMSIS v2 对原版 FreeRTOS 函数进行了封装。</p>
+<h2 id="_1">任务管理函数</h2>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>FreeRTOS 原版</th>
+<th>CMSIS v2 封装</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>创建任务</td>
+<td>xTaskCreate</td>
+<td>osThreadNew</td>
+<td>创建任务并加入活动任务列表</td>
+</tr>
+<tr>
+<td>获取任务名</td>
+<td>pcTaskGetName</td>
+<td>osThreadGetName</td>
+<td>获取任务名称</td>
+</tr>
+<tr>
+<td>获取当前任务</td>
+<td>xTaskGetCurrentTaskHandle</td>
+<td>osThreadGetId</td>
+<td>返回当前运行任务ID</td>
+</tr>
+<tr>
+<td>获取任务状态</td>
+<td>xTaskGetSchedulerState</td>
+<td>osThreadGetState</td>
+<td>获取任务当前状态</td>
+</tr>
+<tr>
+<td>设置优先级</td>
+<td>vTaskPrioritySet</td>
+<td>osThreadSetPriority</td>
+<td>更改任务优先级</td>
+</tr>
+<tr>
+<td>获取优先级</td>
+<td>uxTaskPriorityGet</td>
+<td>osThreadGetPriority</td>
+<td>获取任务优先级</td>
+</tr>
+<tr>
+<td>挂起任务</td>
+<td>vTaskSuspend</td>
+<td>osThreadSuspend</td>
+<td>暂停任务，保持阻塞状态</td>
+</tr>
+<tr>
+<td>恢复任务</td>
+<td>vTaskResume</td>
+<td>osThreadResume</td>
+<td>恢复被挂起的任务</td>
+</tr>
+<tr>
+<td>退出当前任务</td>
+<td>vTaskDelete</td>
+<td>osThreadExit</td>
+<td>终止当前任务</td>
+</tr>
+<tr>
+<td>让出CPU</td>
+<td>portYIELD</td>
+<td>osThreadYield</td>
+<td>交给下一个就绪态线程</td>
+</tr>
+<tr>
+<td>终止任务</td>
+<td>vTaskDelete</td>
+<td>osThreadTerminate</td>
+<td>终止指定任务</td>
+</tr>
+<tr>
+<td>获取栈空间</td>
+<td>uxTaskGetStackHighWaterMark</td>
+<td>osThreadGetStackSpace</td>
+<td>获取可用堆栈空间</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vs">挂起 vs 终止</h2>
+<ul>
+<li><strong>osThreadSuspend</strong>：挂起任务，保持阻塞状态，可用 osThreadResume 恢复</li>
+<li>如果恢复的任务优先级高于当前任务，系统会立即切换到该任务</li>
+<li><strong>osThreadTerminate</strong>：终止任务后只能用 osThreadNew 重新创建</li>
+<li>新任务的内部变量值无法恢复到终止时的状态</li>
+</ul>
+<blockquote>
+<p>要暂停后恢复任务，应使用 Suspend/Resume，而不是 Terminate + New。</p>
+</blockquote>
+<h2 id="_2">任务通知（线程标志）</h2>
+<p>每个 FreeRTOS 任务有一个32位通知值，可用于简单的任务间通信和同步：</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>CMSIS v2 函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>设置标志</td>
+<td>osThreadFlagsSet</td>
+<td>设置指定任务的标志</td>
+</tr>
+<tr>
+<td>清除标志</td>
+<td>osThreadFlagsClear</td>
+<td>清除当前任务的标志</td>
+</tr>
+<tr>
+<td>获取标志</td>
+<td>osThreadFlagsGet</td>
+<td>获取当前任务的标志</td>
+</tr>
+<tr>
+<td>等待标志</td>
+<td>osThreadFlagsWait</td>
+<td>等待一个或多个标志位被设置</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>不需要额外创建通知变量，比消息队列更轻量</li>
+<li>适合简单的任务间同步场景</li>
+</ul>
+<h2 id="_3">任务调度</h2>
+<ul>
+<li>每个时刻只执行一个任务</li>
+<li>优先级范围：硬件设置（CubeMX）时为 0-31，软件设置时可自定义</li>
+<li>新任务创建后放入就绪列表</li>
+</ul>
+<h2 id="_4">相关主题</h2>
+<ul>
+<li><a href="freertos-basics.html">[link]</a> — FreeRTOS 基础概念与裸机对比</li>
+<li><a href="freertos-ipc.html">[link]</a> — 消息队列、信号量等更复杂的通信方式</li>
+<li><a href="timer.html">[link]</a> — 定时器与任务调度的配合</li>
+</ul>
+<h2 id="_5">来源</h2>
+<ul>
+<li><code>实验04_RTOS任务管理实验(V25).pdf</code> — 任务管理函数详解、挂起/恢复/终止对比、任务通知机制（17页）</li>
+<li><code>任务调度方式与任务状态.docx</code> — 任务调度方式与优先级范围总结</li>
+</ul>
+</body>
+</html>
